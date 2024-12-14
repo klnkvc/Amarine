@@ -1,0 +1,176 @@
+
+// // Endpoint untuk mendapatkan data dari tabel akun ----------------------------------------------------------------------------------------------------------------------------------------
+// app.get("/api/akun", (req, res) => {
+//   const query = "SELECT * FROM akun";
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error fetching data:", err);
+//       res.status(500).send("Error fetching data");
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
+
+// // Endpoint untuk mendapatkan data dari tabel detail_stok ----------------------------------------------------------------------------------------------------------------------------------------
+// app.get("/api/detail_stok", (req, res) => {
+//   const query = "SELECT * FROM detail_stok";
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error fetching data:", err);
+//       res.status(500).send("Error fetching data");
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
+
+// Endpoint untuk mendapatkan data dari tabel nelayan ----------------------------------------------------------------------------------------------------------------------------------------
+// app.get("/api/nelayan", (req, res) => {
+//   const query = `
+//       SELECT n.*, a.email, a.gambar
+//       FROM nelayan n
+//       JOIN akun a ON n.id_akun = a.id
+//     `;
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error fetching data:", err);
+//       res.status(500).send("Error fetching data");
+//       return;
+//     }
+//     console.log("Results from database:", results); // Log hasil query
+//     res.json(results);
+//   });
+// });
+
+// // Endpoint untuk mendapatkan data dari tabel pencatatan ----------------------------------------------------------------------------------------------------------------------------------------
+// app.get("/api/pencatatan", (req, res) => {
+//   const query = "SELECT * FROM pencatatan";
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error fetching data:", err);
+//       res.status(500).send("Error fetching data");
+//       return;
+//     }
+//     console.log("Results from database:", results); // Log hasil query
+//     res.json(results);
+//   });
+// });
+
+// // Endpoint untuk mendapatkan data dari tabel pengepul ----------------------------------------------------------------------------------------------------------------------------------------
+// app.get("/api/pengepul", (req, res) => {
+//   const query = "SELECT * FROM pengepul";
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error fetching data:", err);
+//       res.status(500).send("Error fetching data");
+//       return;
+//     }
+//     console.log("Results from database:", results); // Log hasil query
+//     res.json(results);
+//   });
+// });
+
+// import React from 'react';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import LaporanDetail from './laporandetail';
+// //ROUTEES
+// function App() {
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route path="/laporandetail" element={<LaporanDetail />} />
+//       </Routes>
+//     </Router>
+//   );
+// }
+
+
+// export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IRFAN 
+
+//
+// app.get('/api/profil', authenticate, async (req, res) => {
+//   try {
+//     const userId = req.user.id;  // Dapatkan userId dari token yang sudah diverifikasi
+
+//     if (!userId) {
+//       return res.status(400).json({ message: 'User ID tidak ditemukan' });
+//     }
+
+//     // Mencari data pengguna berdasarkan id_akun
+//     const pengepul = await Pengepul.findOne({
+//       where: { id_akun: userId },
+//       include: Akun,  // Pastikan Akun berelasi dengan Pengepul dengan benar
+//     });
+
+//     if (!pengepul) {
+//       return res.status(404).json({ message: 'Profil tidak ditemukan' });
+//     }
+
+//     // Menyiapkan data profil pengguna
+//     const profilData = {
+//       nama: pengepul.nama,
+//       no_hp: pengepul.no_hp,
+//       email: pengepul.Akun ? pengepul.Akun.email : null,
+//       alamat: pengepul.alamat,
+//       tanggal_lahir: pengepul.tanggal_lahir,
+//     };
+
+//     // Mengirimkan data profil dalam format JSON
+//     res.json(profilData);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Terjadi kesalahan saat mengambil profil', error: error.message });
+//   }
+// });
+
+// //
+// app.post('/api/profil', authenticate, async (req, res) => {
+//   try {
+//     const { nama, no_hp, email, alamat, tanggal_lahir } = req.body;
+//     const userId = req.user.id;  // Dapatkan userId dari token yang sudah diverifikasi
+
+//     const pengepul = await Pengepul.findOne({ where: { id_akun: userId } });
+//     if (!pengepul) {
+//       return res.status(404).json({ message: 'Profil tidak ditemukan' });
+//     }
+
+//     pengepul.nama = nama;
+//     pengepul.no_hp = no_hp;
+//     pengepul.alamat = alamat;
+//     pengepul.tanggal_lahir = tanggal_lahir;
+//     await pengepul.save();
+
+//     // Perbarui data akun email jika ada
+//     const akun = await Akun.findOne({ where: { id: pengepul.id_akun } });
+//     if (akun) {
+//       akun.email = email;
+//       await akun.save();
+//     }
+
+//     res.status(200).json({ message: 'Profil berhasil diperbarui' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Terjadi kesalahan saat memperbarui profil' });
+//   }
+// });

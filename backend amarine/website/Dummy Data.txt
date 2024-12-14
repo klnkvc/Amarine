@@ -1,0 +1,30 @@
+
+INSERT INTO akun (id, email, password, role) VALUES
+(102983, 'user1@example.com', 'password123', 'nelayan'),
+(309203, 'user2@example.com', 'password456', 'nelayan'),
+(504928, 'user3@example.com', 'password789', 'nelayan');
+
+INSERT INTO nelayan (id, id_akun, nama, no_hp, tanggal_lahir, alamat) VALUES
+(808492, 102983, 'Andi Wijaya', '081234567890', '1990-05-10', 'Jl. Merdeka No.1, Jakarta'),
+(203849, 309203, 'Budi Santoso', '082345678901', '1985-11-15', 'Jl. Raya No.12, Surabaya'),
+(928492, 504928, 'Citra Dewi', '083456789012', '1992-03-20', 'Jl. Sudirman No.25, Bandung');
+
+INSERT INTO pencatatan (id, id_nelayan, nama, jenis, berat, tanggal, waktu, lokasi_penyimpanan, catatan, gambar) VALUES
+(301234, 808492, 'Ikan Tuna', 'Laut', 5.5, '2024-12-01', '08:00', 'Pulau PramukaBeku', 'Ditangkap di pagi hari', ''),
+(301235, 808492, 'Ikan Kakap', 'Laut', 3.2, '2024-12-02', '09:30', 'Kepulauan SeribuSegar', 'Ikan kakap besar', ''),
+(301236, 808492, 'Ikan Kerapu', 'Laut', 2.8, '2024-12-03', '10:15', 'Laut BaliBeku', 'Ditangkap sekitar jam 10', ''),
+(203847, 203849, 'Ikan Lele', 'Kolam', 1.2, '2024-12-01', '06:30', 'Kolam DesaSegar', 'Ikan lele segar', ''),
+(203848, 203849, 'Ikan Mas', 'Kolam', 2.0, '2024-12-02', '07:00', 'Kolam DesaBeku', 'Panen pagi hari', ''),
+(203849, 203849, 'Ikan Nila', 'Kolam', 1.8, '2024-12-03', '08:45', 'Kolam DesaBeku', 'Ditangkap di sore hari', ''),
+(928493, 928492, 'Ikan Marlin', 'Laut', 15.0, '2024-12-01', '05:00', 'Laut AcehBeku', 'Ikan besar', ''),
+(928494, 928492, 'Ikan Hiu', 'Laut', 30.0, '2024-12-02', '06:30', 'Laut Selat SundBeku', 'Tangkapan besar', ''),
+(928495, 928492, 'Ikan Pari', 'Laut', 12.3, '2024-12-03', '07:15', 'Laut BalSegar', 'Ikan pari segar', '');
+
+INSERT INTO detail_stok (id, nama, jenis, terjual, tersedia) VALUES
+(1, 'Laut', 'Laut',0, 50),
+(2, 'Kolam', 'Kolam',0, 20)
+
+INSERT INTO penjualan (id_pengepul, nama, jenis, harga, berat, catatan, tanggal, gambar)
+VALUES
+(10, 'Contoh Nama', 'Jenis Contoh', 50000, 10, 'Catatan Contoh', '2024-12-12', '');
+(10, 'Bakwan', 'Jenis Ikan', 50000, 10, 'Catatan Contoh', '2024-12-12', '');
