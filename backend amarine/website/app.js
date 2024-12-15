@@ -14,7 +14,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+app.options('*', cors()); // Tangani semua preflight
 
+
+
+//SERVER YANG MENJALANKAN FRONT-END NYA
+// app.use(cors({
+//   origin: 'http://localhost:3000', // Ganti dengan domain frontend Anda
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Metode yang diizinkan
+//   credentials: true // Jika Anda menggunakan cookie atau autentikasi berbasis sesi
+// }));
 
 app.get('/config', (req, res) => {
   res.json({ baseUrl: process.env.BASE_URL });
@@ -511,9 +520,131 @@ app.get("/detailpul", (req, res) => {
   });
 });
 
+app.post('/tambah-penjualan', (req, res) => {
+  const { nama, jenis, berat, tanggal, harga, catatan } = req.body;
+  const id_akun = req.query.id_akun; // Ambil id_akun dari query parameter
+  const gambar = null;
 
+  if (!id_akun) {
+    return res.status(400).json({ message: "id_akun harus disertakan di query parameter." });
+  }
 
+  // Cari id_pengepul berdasarkan id_akun
+  const queryPengepul = `SELECT id FROM pengepul WHERE id_akun = ?`;
+  db.query(queryPengepul, [id_akun], (err, rows) => {
+    if (err) {
+      console.error("Error saat mencari id_pengepul:", err);
+      return res.status(500).json({ message: "Terjadi kesalahan saat mencari data pengepul." });
+    }
 
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "id_pengepul tidak ditemukan untuk id_akun ini." });
+    }
+
+    const id_pengepul = rows[0].id;
+
+    // Mulai transaksi agar kedua operasi ini dilakukan bersama-sama
+    db.beginTransaction((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Terjadi kesalahan pada transaksi." });
+      }
+
+      // Query untuk menyimpan data ke tabel penjualan
+      const queryPenjualan = `
+        INSERT INTO penjualan (id_pengepul, nama, jenis, berat, tanggal, harga, catatan, gambar)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+      db.query(
+        queryPenjualan,
+        [id_pengepul, nama, jenis, berat, tanggal, harga, catatan, gambar],
+        (err, result) => {
+          if (err) {
+            return db.rollback(() => {
+              console.error("Error saat menyimpan data penjualan:", err);
+              res.status(500).json({ message: "Terjadi kesalahan saat menyimpan data penjualan." });
+            });
+          }
+
+          // Cek apakah jenis sudah ada di tabel detail_stok
+          const checkStokQuery = `SELECT * FROM detail_stok WHERE jenis = ?`;
+          db.query(checkStokQuery, [jenis], (err, rows) => {
+            if (err) {
+              return db.rollback(() => {
+                console.error("Error saat mengecek stok:", err);
+                res.status(500).json({ message: "Terjadi kesalahan saat mengecek data stok." });
+              });
+            }
+
+            if (rows.length > 0) {
+              // Jika jenis sudah ada, update data stok
+              const upsertStokQuery = `
+                UPDATE detail_stok
+                SET tersedia = tersedia - ?, terjual = terjual + ?
+                WHERE jenis = ?
+              `;
+              db.query(
+                upsertStokQuery,
+                [berat, berat, jenis],
+                (err, updateResult) => {
+                  if (err) {
+                    return db.rollback(() => {
+                      console.error("Error saat update stok:", err);
+                      res.status(500).json({ message: "Terjadi kesalahan saat update stok." });
+                    });
+                  }
+
+                  // Commit transaksi setelah kedua operasi selesai
+                  db.commit((err) => {
+                    if (err) {
+                      return db.rollback(() => {
+                        console.error("Error saat commit transaksi:", err);
+                        res.status(500).json({ message: "Terjadi kesalahan saat commit transaksi." });
+                      });
+                    }
+
+                    res.status(200).json({ message: "Data berhasil disimpan dan stok terupdate", data: result });
+                  });
+                }
+              );
+            } else {
+              // Jika jenis belum ada, buat baris baru di detail_stok
+              const insertStokQuery = `
+                INSERT INTO detail_stok (nama, jenis, tersedia, terjual)
+                VALUES (?, ?, ?, ?)
+              `;
+              // Menambahkan "Penjualan (" + jenis + ")"
+              const namaStok = `Penjualan (${jenis})`;
+              db.query(
+                insertStokQuery,
+                [namaStok, jenis, berat, berat],
+                (err, insertResult) => {
+                  if (err) {
+                    return db.rollback(() => {
+                      console.error("Error saat insert stok baru:", err);
+                      res.status(500).json({ message: "Terjadi kesalahan saat insert stok baru." });
+                    });
+                  }
+
+                  // Commit transaksi setelah kedua operasi selesai
+                  db.commit((err) => {
+                    if (err) {
+                      return db.rollback(() => {
+                        console.error("Error saat commit transaksi:", err);
+                        res.status(500).json({ message: "Terjadi kesalahan saat commit transaksi." });
+                      });
+                    }
+
+                    res.status(200).json({ message: "Data berhasil disimpan dan stok terupdate", data: result });
+                  });
+                }
+              );
+            }
+          });
+        }
+      );
+    });
+  });
+});
 
 
 // Jalankan server
