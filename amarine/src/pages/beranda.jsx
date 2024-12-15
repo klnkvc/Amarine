@@ -66,31 +66,29 @@ function beranda() {
                 </div>
               </div>
               <div
-                href="beranda"
+                href="panduan3"
                 className="card-main-content-panduan-dan-artikel-secondary"
               >
                 <img src="assets/artikel 2.png" alt="panduan" />
                 <div className="card-main-content-panduan-dan-artikel-secondary-deskripsi">
-                  <h2>Tradisi & Modernisasi Nelayan</h2>
+                  <h2>Pentingnya Keselamatan</h2>
                   <h3>
-                    Muro, Tradisi Merawat Ekosistem Laut yang Berkelanjutan di
-                    Lembata
+                  Keselamatan kerja adalah hal mendasar yang harus diterapkan
                   </h3>
-                  <a href="panduan1">Baca Selengkapnya</a>
+                  <a href="panduan3">Baca Selengkapnya</a>
                 </div>
               </div>
               <div
-                href="beranda"
+                href="panduan4"
                 className="card-main-content-panduan-dan-artikel-secondary"
               >
                 <img src="assets/artikel 3.png" alt="panduan" />
                 <div className="card-main-content-panduan-dan-artikel-secondary-deskripsi">
-                  <h2>Inovasi Untuk Nelayan</h2>
+                  <h2>Panduan Praktis Atasi Tantangan</h2>
                   <h3>
-                    Tanpa BBM, Kapal Nelayan Inovasi Mahasiswa ITS Ramah
-                    Lingkungan
+                  Di dunia yang terus berubah, memiliki panduan praktis untuk berbagai aspek kehidupan sangat penting
                   </h3>
-                  <a href="beranda">Baca Selengkapnya</a>
+                  <a href="panduan4">Baca Selengkapnya</a>
                 </div>
               </div>
             </div>

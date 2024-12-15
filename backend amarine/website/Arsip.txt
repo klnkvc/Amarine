@@ -174,3 +174,80 @@ IRFAN
 //     res.status(500).json({ message: 'Terjadi kesalahan saat memperbarui profil' });
 //   }
 // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Menangani perubahan input form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: URL.createObjectURL(file) });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    if (!formData.nama || !formData.jenis || !formData.berat || !formData.tanggal || !formData.harga) {
+      setError('Semua field wajib diisi!');
+      return;
+    }
+  
+    setIsSubmitting(true);
+  
+    // Gunakan FormData untuk mengirim file gambar
+    const formDataToSend = new FormData();
+    formDataToSend.append('nama', formData.nama);
+    formDataToSend.append('jenis', formData.jenis);
+    formDataToSend.append('berat', formData.berat);
+    formDataToSend.append('tanggal', formData.tanggal);
+    formDataToSend.append('harga', formData.harga);
+    formDataToSend.append('catatan', formData.catatan);
+    formDataToSend.append('image', 'assets/Ikan-default.jpg');
+
+  
+    console.log(formData)
+    console.log(formDataToSend)
+
+    fetch(`${BASE_URL}/update-penjualan/id=${id}`, {
+      method: "PUT",
+      body: formDataToSend, // Kirim FormData, bukan JSON string
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setIsSubmitting(false);
+        alert('Data berhasil diperbarui');
+      })
+      .catch((err) => {
+        setIsSubmitting(false);
+        setError('Terjadi kesalahan saat memperbarui data');
+      });
+  };

@@ -17,10 +17,10 @@ import Nelayan from './pages/nelayan'
 import Panduan1 from './pages/panduan1'
 import Panduan2 from './pages/panduan2'
 import Panduan3 from './pages/panduan3'
-// import Panduan4 from './pages/panduan4'
-// import Panduan5 from './pages/panduan5'
-// import Panduan6 from './pages/panduan6'
-// import Panduan7 from './pages/panduan7'
+import Panduan4 from './pages/panduan4'
+import Panduan5 from './pages/panduan5'
+import Panduan6 from './pages/panduan6'
+import Panduan7 from './pages/panduan7'
 // import Panduan8 from './pages/panduan8'
 // import Panduan9 from './pages/panduan9'
 import Profil1 from './pages/profil1'
@@ -62,11 +62,11 @@ function App() {
         <Route path="/panduan1" element={<Panduan1 />} />
         <Route path="/panduan2" element={<Panduan2 />} />
        <Route path="/panduan3" element={<Panduan3 />} />
-        {/*  <Route path="/panduan4" element={<Panduan4 />} />
+        <Route path="/panduan4" element={<Panduan4 />} />
         <Route path="/panduan5" element={<Panduan5 />} />
         <Route path="/panduan6" element={<Panduan6 />} />
         <Route path="/panduan7" element={<Panduan7 />} />
-        <Route path="/panduan8" element={<Panduan8 />} />
+       {/*   <Route path="/panduan8" element={<Panduan8 />} />
         <Route path="/panduan9" element={<Panduan9 />} /> */}
         <Route path="/profil1" element={<Profil1 />} />
         <Route path="/profil2" element={<Profil2 />} />

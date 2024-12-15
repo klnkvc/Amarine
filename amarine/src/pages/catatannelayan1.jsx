@@ -69,7 +69,7 @@ function CatatanNelayan1() {
       <div className="card-catatan-hasil-tangkapan-nelayan">
         <div className="container-image-catatan">
           <img
-            src={item.gambar ? item.gambar : "assets/Ikan-default.jpg"} // Pastikan URL gambar sudah lengkap di API
+            src={item.gambar ? item.gambar : "assets/ikan-default.jpg"} // Pastikan URL gambar sudah lengkap di API
             alt={item.nama}
           />
           <div className="jumlah-berat">{item.berat} Kg</div>

@@ -1,10 +1,55 @@
-import React from "react";
-
+import React, { useState } from "react";
 import * as script from "../script";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-function tambahhasiltangkapan() {
+function Tambahhasiltangkapan() {
+  const [image, setImage] = useState(null);
+  const [formData, setFormData] = useState({
+    nama: "",
+    jenis: "",
+    berat: "",
+    tanggal: "",
+    harga: "",
+    catatan: "",
+  });
+
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const idAkun = user.id; // Mendapatkan id_akun dari data user
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Prepare form data
+    const data = new FormData();
+    data.append("nama", formData.nama);
+    data.append("jenis", formData.jenis);
+    data.append("berat", formData.berat);
+    data.append("tanggal", formData.tanggal);
+    data.append("harga", formData.harga);
+    data.append("catatan", formData.catatan);
+    if (image) {
+      data.append("upload-image", image);
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/tambah-penjualan?id_akun=${idAkun}`, {
+        method: "POST",
+        body: data,
+      });
+
+      if (response.ok) {
+        script.tampilkanPopupBerhasil();
+      } else {
+        console.error("Failed to submit data");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div>
       {/* Header */}
@@ -25,10 +70,8 @@ function tambahhasiltangkapan() {
           <div className="wrapper-detail-hasil-tangkapan wrapper-informasi-detail-hasil-tangkapan">
             <div className="wrapper-gambar-informasi">
               <form
-                action=""
-                method="POST"
+                onSubmit={handleSubmit}  // Update this to use handleSubmit function
                 className="form-detail-hasil-tangkapan"
-                onSubmit={(event) => script.tampilkanPopupBerhasil(event)}
               >
                 <div className="gambar-detail-hasil-tangkapan tambah-gambar-detail-hasil-tangkapan">
                   Gambar
@@ -40,10 +83,7 @@ function tambahhasiltangkapan() {
                       id="upload-image"
                       accept="image/*"
                       name="upload-image"
-                      required
-                      onInvalid={(e) =>
-                        e.target.setCustomValidity("Tolong masukkan Gambar!")
-                      }
+                      onChange={(e) => setImage(e.target.files[0])}  // Handle file upload
                       onInput={(e) => e.target.setCustomValidity("")}
                     />
                     <label for="upload-image" className="">
@@ -61,15 +101,10 @@ function tambahhasiltangkapan() {
                     <input
                       type="text"
                       name="nama"
-                      id=""
                       className="isi-informasi"
+                      value={formData.nama}
+                      onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
                       required
-                      onInvalid={(e) =>
-                        e.target.setCustomValidity(
-                          "Tolong masukkan Data Valid!"
-                        )
-                      }
-                      onInput={(e) => e.target.setCustomValidity("")}
                     />
                   </div>
                   <div className="jenis-detail">
@@ -78,47 +113,30 @@ function tambahhasiltangkapan() {
                     </label>
                     <select
                       name="jenis"
-                      id="jenisikan"
                       className="isi-informasi"
+                      value={formData.jenis}
+                      onChange={(e) => setFormData({ ...formData, jenis: e.target.value })}
                       required
-                      onInvalid={(e) =>
-                        e.target.setCustomValidity(
-                          "Tolong masukkan Jenis Ikan!"
-                        )
-                      }
-                      onInput={(e) => e.target.setCustomValidity("")}
                     >
-                      <option
-                        value=""
-                        className="placeholder-jenis"
-                        selected
-                        disabled
-                        hidden
-                      >
+                      <option value="" disabled hidden>
                         Jenis Ikan
                       </option>
                       <option value="ikan">Ikan</option>
                       <option value="kepiting">Kepiting</option>
                       <option value="kerang">Kerang</option>
                     </select>
-                    <i className="fas fa-angle-down select-icon"></i>
                   </div>
                   <div className="jenis-detail">
-                    <label for="Berat" className="judul-informasi">
+                    <label for="berat" className="judul-informasi">
                       Berat
                     </label>
                     <input
                       type="number"
                       name="berat"
-                      id=""
                       className="isi-informasi"
+                      value={formData.berat}
+                      onChange={(e) => setFormData({ ...formData, berat: e.target.value })}
                       required
-                      onInvalid={(e) =>
-                        e.target.setCustomValidity(
-                          "Tolong masukkan Data Valid!"
-                        )
-                      }
-                      onInput={(e) => e.target.setCustomValidity("")}
                     />
                   </div>
                   <div className="jenis-detail">
@@ -126,17 +144,12 @@ function tambahhasiltangkapan() {
                       Tanggal
                     </label>
                     <input
-                      type="text"
+                      type="date"
                       name="tanggal"
-                      id=""
                       className="isi-informasi"
+                      value={formData.tanggal}
+                      onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
                       required
-                      onInvalid={(e) =>
-                        e.target.setCustomValidity(
-                          "Tolong masukkan Data Tanggal!"
-                        )
-                      }
-                      onInput={(e) => e.target.setCustomValidity("")}
                     />
                   </div>
                   <div className="jenis-detail">
@@ -146,16 +159,10 @@ function tambahhasiltangkapan() {
                     <input
                       type="text"
                       name="harga"
-                      id=""
                       className="isi-informasi"
+                      value={formData.harga}
+                      onChange={(e) => setFormData({ ...formData, harga: e.target.value })}
                       required
-                      placeholder="Rp. "
-                      onInvalid={(e) =>
-                        e.target.setCustomValidity(
-                          "Tolong masukkan Data Valid!"
-                        )
-                      }
-                      onInput={(e) => e.target.setCustomValidity("")}
                     />
                   </div>
                   <div className="jenis-detail">
@@ -164,8 +171,9 @@ function tambahhasiltangkapan() {
                     </label>
                     <textarea
                       name="catatan"
-                      id=""
                       className="isi-informasi"
+                      value={formData.catatan}
+                      onChange={(e) => setFormData({ ...formData, catatan: e.target.value })}
                     ></textarea>
                   </div>
                 </div>
@@ -194,7 +202,6 @@ function tambahhasiltangkapan() {
                   </button>
                   <input
                     type="submit"
-                    name=""
                     value="Simpan"
                     className="submit-detail-hasil-tangkapan"
                   />
@@ -206,98 +213,11 @@ function tambahhasiltangkapan() {
       </div>
       {/* Main Content End */}
 
-      {/* Popup Hapus */}
-      <div id="popup-hapus" className="popup-hidden-hapus">
-        <div className="popup-box">
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-icon">
-            <img src="assets/trash.svg" alt="Trash Icon" />
-          </div>
-          <p className="popup-message">
-            Anda yakin ingin menghapus catatan ini?
-          </p>
-          <div className="popup-buttons">
-            <button
-              className="btn btn-confirm"
-              onClick={() => script.berhasilHapusPopup()}
-            >
-              Ya
-            </button>
-            <button
-              className="btn btn-cancel"
-              onClick={() => script.sembunyikanPopup()}
-            >
-              Tidak
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* Popup End */}
-
-      {/* Popup Berhasil Hapus  */}
-      <div id="popup-berhasil-hapus" className="popup-hidden-hapus">
-        <div className="popup-box">
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-icon">
-            <img src="assets/accept.svg" alt="Berhasil" />
-          </div>
-          <p className="popup-message">Selesai!</p>
-          <p className="popup-message popup-message-child">
-            Catatan berhasil dihapus
-          </p>
-        </div>
-      </div>
-      {/* Popup End */}
-
-      {/* Popup Berhasil Simpan */}
-      <div id="popup-berhasil-simpan" className="popup-hidden-hapus">
-        <div className="popup-box">
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-mini-icon"></div>
-          <div className="popup-icon">
-            <img src="assets/accept.svg" alt="Berhasil" />
-          </div>
-          <p className="popup-message">Selesai!</p>
-          <p className="popup-message popup-message-child">
-            Catatan berhasil disimpan
-          </p>
-        </div>
-      </div>
-      {/* Popup End */}
-
       {/* Footer */}
       <Footer />
       {/* Footer End */}
-
-      {/* Navbar Mobile */}
-      <div className="wrapper-navbar-bottom d-none">
-        <a href="laporan">
-          <img src="assets/laporan icon.svg" alt="Laporan" />
-        </a>
-        <a href="catatannelayan1">
-          <img src="assets/catatan nelayan icon.svg" alt="Catatan Nelayan" />
-        </a>
-        <a href="catatanpengepul1">
-          <img
-            src="assets/catatan pengepul icon active.svg"
-            alt="Catatan Pengepul"
-          />
-        </a>
-        <a href="stok">
-          <img src="assets/stok icon.svg" alt="Stok" />
-        </a>
-      </div>
-      {/* Navbar Mobile End*/}
     </div>
   );
 }
 
-export default tambahhasiltangkapan;
+export default Tambahhasiltangkapan;
