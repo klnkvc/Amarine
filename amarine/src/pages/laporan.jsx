@@ -85,7 +85,7 @@ function Laporan() {
                     <tr key={nelayan.id}>
                       <td>
                         <div className="content-tabel-laporan-nelayan">
-                          <img src="assets/dasar.png" alt="Nelayan" />
+                          <img src="assets/pak bahrul.png" alt="Nelayan" />
                           <span>{nelayan.nama}</span>
                         </div>
                       </td>

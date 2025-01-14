@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import React, { useEffect, useState } from "react";
-
+import * as script from "../script";
 function TambahHasilTangkapan() {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const location = useLocation();
@@ -40,6 +40,24 @@ function TambahHasilTangkapan() {
             setIsLoading(false); // Set loading selesai
         }
     }, [id, BASE_URL]);
+
+        const handleClick = () => {
+          // Menampilkan popup konfirmasi
+          const confirmAction = window.confirm("Apakah Anda yakin ingin melakukan UPDATE data ?");
+          if (confirmAction) {
+            // Kembali ke halaman sebelumnya
+            window.history.back();
+          }
+        };
+
+        const hahah = () => {
+            // Menampilkan popup konfirmasi
+            const confirmAction = window.confirm("Apakah Anda yakin ingin melakukan HAPUS data ?");
+            if (confirmAction) {
+              // Kembali ke halaman sebelumnya
+              window.history.back();
+            }
+          };
 
     return (
         <div>
@@ -142,6 +160,39 @@ function TambahHasilTangkapan() {
                                                 />
                                             </div>
                                         </div>
+                                        <div className="button-hapus-simpan ms-auto">
+                  <button
+                    onClick={hahah}
+                    className="hapus-detail-hasil-tangkapan"
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="2rem"
+                      height="2rem"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="#FF620A"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"
+                      />
+                    </svg>
+                    Hapus
+                  </button>
+
+                  <button
+      type="button"
+      className="submit-detail-hasil-tangkapan"
+      onClick={handleClick}
+    >
+      UPDATE
+    </button>
+
+                </div>
                                     </form>
                                 </div>
                             </div>

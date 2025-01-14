@@ -6,24 +6,13 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const { expressjwt } = require('express-jwt');
 require('dotenv').config();
-// const multer = require('multer');
-// const { sequelizeAmarine } = require('/Model/database'); 
-// const Akun = require('/Model/Akun');  
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-app.options('*', cors()); // Tangani semua preflight
+app.options('*', cors());
 
-
-
-//SERVER YANG MENJALANKAN FRONT-END NYA
-// app.use(cors({
-//   origin: 'http://localhost:3000', // Ganti dengan domain frontend Anda
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Metode yang diizinkan
-//   credentials: true // Jika Anda menggunakan cookie atau autentikasi berbasis sesi
-// }));
 
 app.get('/config', (req, res) => {
   res.json({ baseUrl: process.env.BASE_URL });
@@ -31,10 +20,10 @@ app.get('/config', (req, res) => {
 
 // Konfigurasi koneksi database ----------------------------------------------------------------------------------------------------------------------------------------
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "amarine",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 // Cek koneksi database ----------------------------------------------------------------------------------------------------------------------------------------
@@ -646,9 +635,7 @@ app.post('/tambah-penjualan', (req, res) => {
   });
 });
 
-
-// Jalankan server
-app.listen(3001,'0.0.0.0', () => {
-  console.log("Server berjalan di http://localhost:3001");
+const PORT = process.env.PORT || 3000; 
+app.listen(PORT, process.env.HOST, () => {
+  console.log(`Server berjalan di http://${process.env.HOST}:${PORT}`);
 });
-
