@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.options('*', cors());
 
 
-app.get('/config', (req, res) => {
+app.get('/api/v1/config', (req, res) => {
   res.json({ baseUrl: process.env.BASE_URL });
 });
 
@@ -36,7 +36,7 @@ db.connect((err) => {
 });
 
 // Endpoint untuk daftar ----------------------------------------------------------------------------------------------------------------------------------------
-app.post("/akun-web", async (req, res) => {
+app.post("/api/v1/akun-web", async (req, res) => {
   const { email, password, nama, no_hp } = req.body; // Ubah 'noTelepon' menjadi 'no_hp'
   console.log("Input dari pengguna:", { email, nama, no_hp });
   try {
@@ -84,7 +84,7 @@ const checkUser = (req, res, next) => {
 };
 
 // Endpoint login
-app.post("/logincoy", async (req, res) => {
+app.post("/api/v1/logincoy", async (req, res) => {
   try {
     console.log("Login request received:", req.body);
     const { email, password } = req.body;
@@ -144,7 +144,7 @@ app.post("/logincoy", async (req, res) => {
 
 
 // Endpoint untuk menambahkan pengepul ----------------------------------------------------------------------------------------------------------------------------------------
-app.post("/pengepul", (req, res) => {
+app.post("/api/v1/pengepul", (req, res) => {
   const { id_akun, nama, no_hp } = req.body; // Ambil data dari request body
   const query = "INSERT INTO pengepul (id_akun, nama, no_hp) VALUES (?, ?, ?)";
 
@@ -158,7 +158,7 @@ app.post("/pengepul", (req, res) => {
   });
 });
 
-app.get('/stok-web', (req, res) => {
+app.get('/api/v1/stok-web', (req, res) => {
   const query = 'SELECT * FROM detail_stok';
 
   db.query(query, (err, results) => {
@@ -182,7 +182,7 @@ app.get('/stok-web', (req, res) => {
 });
 
 
-app.get("/get-penjualan", (req, res) => {
+app.get("/api/v1/get-penjualan", (req, res) => {
   const query = `
     SELECT 
       penjualan.id,
@@ -215,7 +215,7 @@ app.get("/get-penjualan", (req, res) => {
 
 
 // endpoint untuk mengambil data nelayan dengan total kuantitas mereka -----------------------------------------------------------------
-app.get("/kuantitas", (req, res) => {
+app.get("/api/v1/kuantitas", (req, res) => {
   const query = `
       SELECT n.id, n.nama, IFNULL(SUM(p.berat), 0) AS total_berat
       FROM nelayan n
@@ -243,7 +243,7 @@ app.get("/kuantitas", (req, res) => {
 
 
 //End Point Detail Dari Catatan PerOrang
-app.get('/pencatatanweb', (req, res) => {
+app.get('/api/v1/pencatatanweb', (req, res) => {
   const { id } = req.query; // Mengambil id dari query string
   console.log('Received id:', id); // Pastikan id diterima dengan benar
 
@@ -275,7 +275,7 @@ WHERE id_nelayan = ?;
 
 //Api Mengambil semua datanelayan
 // API Endpoint untuk mendapatkan data nelayan
-app.get('/api/nelayan', (req, res) => {
+app.get('/api/v1/nelayan', (req, res) => {
   const query = `
     SELECT nelayan.id, nelayan.nama, nelayan.no_hp, nelayan.tanggal_lahir, nelayan.alamat, akun.email
     FROM nelayan
@@ -292,7 +292,7 @@ app.get('/api/nelayan', (req, res) => {
 });
 
 // Endpoint untuk mengambil data catatan nelayan
-app.get("/api/get-catatan-nelayan", (req, res) => {
+app.get("/api/v1/get-catatan-nelayan", (req, res) => {
   const query = `
     SELECT 
       pencatatan.id,
@@ -316,7 +316,7 @@ app.get("/api/get-catatan-nelayan", (req, res) => {
 });
 
 // Query untuk mengambil data nelayan dan pencatatan berdasarkan id nelayan
-app.get("/detailhasil", (req, res) => {
+app.get("/api/v1/detailhasil", (req, res) => {
   const { id } = req.query; // Ambil id dari query string
   
   console.log("Received id:", id); // Pastikan id diterima dengan benar
@@ -342,7 +342,7 @@ app.get("/detailhasil", (req, res) => {
   });
 }); 
 
-app.get('/profileweb', (req, res) => {
+app.get('/api/v1/profileweb', (req, res) => {
   const { id_akun } = req.query; // Mengambil id_akun dari query parameter
 
   if (!id_akun) {
@@ -372,7 +372,7 @@ app.get('/profileweb', (req, res) => {
 });
 
 
-app.post("/update-profileweb", (req, res) => {
+app.post("/api/v1/update-profileweb", (req, res) => {
   const { email, nama, no_hp, tanggal_lahir, alamat } = req.body;
   const idAkun = req.query.idAkun;  // Mengambil idAkun dari query string
 
@@ -417,7 +417,7 @@ app.post("/update-profileweb", (req, res) => {
 const findUserById = (id) => {
   return users.find(user => user.id === id);
 };
-app.post('/verify-password', async (req, res) => {
+app.post('/api/v1/verify-password', async (req, res) => {
   const { passwordLama, idAkun } = req.body;
   
   // Logika untuk memverifikasi password lama di sini
@@ -436,7 +436,7 @@ app.post('/verify-password', async (req, res) => {
   return res.status(200).json({ message: 'Password lama benar.' });
 });
 
-app.post('/cpassword', async (req, res) => {
+app.post('/api/v1/cpassword', async (req, res) => {
   const { passwordLama, passwordBaru, idAkun } = req.body;
 
   // Validasi input
@@ -477,7 +477,7 @@ app.post('/cpassword', async (req, res) => {
   }
 });
 
-app.get("/detailpul", (req, res) => {
+app.get("/api/v1/detailpul", (req, res) => {
   const { id } = req.query;
 
   console.log("Request received at /detailpul");
@@ -509,7 +509,7 @@ app.get("/detailpul", (req, res) => {
   });
 });
 
-app.post('/tambah-penjualan', (req, res) => {
+app.post('/api/v1/tambah-penjualan', (req, res) => {
   const { nama, jenis, berat, tanggal, harga, catatan } = req.body;
   const id_akun = req.query.id_akun; // Ambil id_akun dari query parameter
   const gambar = null;

@@ -11,7 +11,7 @@ function CatatanNelayan1() {
 
   // Fetch data dari API saat komponen pertama kali dimuat
   useEffect(() => {
-    fetch(`${BASE_URL}/api/get-catatan-nelayan`) 
+    fetch(`${BASE_URL}/get-catatan-nelayan`)
       .then((response) => response.json())
       .then((data) => {
         setData(data); // Simpan data mentah ke state

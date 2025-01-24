@@ -14,7 +14,7 @@ function Nelayan() {
   useEffect(() => {
     // Fetch data and immediately set it without showing loading state
     axios
-      .get(`${BASE_URL}/api/nelayan`)
+      .get(`${BASE_URL}/nelayan`)
       .then((response) => {
         setNelayanData(response.data);
       })
